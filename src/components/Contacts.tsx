@@ -13,6 +13,8 @@ interface Contact {
   dateAdded: string
 }
 
+type ContactFormData = Omit<Contact, 'id' | 'dateAdded'>
+
 export default function Contacts() {
   const [contacts, setContacts] = useState<Contact[]>([
     { id: 1, firstName: 'John', lastName: 'Smith', email: 'john.smith@example.com', phone: '555-0101', position: 'Fleet Manager', company: 'ABC Corp', communicationPreference: 'Email', status: 'Active', dateAdded: '2025-12-01' },
@@ -21,15 +23,15 @@ export default function Contacts() {
   ])
 
   const [showForm, setShowForm] = useState(false)
-  const [formData, setFormData] = useState({ 
+  const [formData, setFormData] = useState<ContactFormData>({ 
     firstName: '', 
     lastName: '',
     email: '',
     phone: '',
     position: '',
     company: '',
-    communicationPreference: 'Email' as const,
-    status: 'Active' as const,
+    communicationPreference: 'Email',
+    status: 'Active',
   })
 
   const handleAddContact = (e: React.FormEvent) => {
@@ -129,7 +131,7 @@ export default function Contacts() {
                 <label>Preferred Contact</label>
                 <select 
                   value={formData.communicationPreference}
-                  onChange={(e) => setFormData({ ...formData, communicationPreference: e.target.value as 'Phone' | 'Email' | 'SMS' })}
+                  onChange={(e) => setFormData({ ...formData, communicationPreference: e.target.value as ContactFormData['communicationPreference'] })}
                 >
                   <option>Email</option>
                   <option>Phone</option>
@@ -140,7 +142,7 @@ export default function Contacts() {
                 <label>Status</label>
                 <select 
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Active' | 'Inactive' })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as ContactFormData['status'] })}
                 >
                   <option>Active</option>
                   <option>Inactive</option>

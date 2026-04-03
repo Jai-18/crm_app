@@ -16,6 +16,8 @@ interface TestDrive {
   rating: number
 }
 
+type TestDriveFormData = Omit<TestDrive, 'id' | 'feedback' | 'rating'>
+
 export default function TestDrive() {
   const [drives, setDrives] = useState<TestDrive[]>([
     { id: 1, customerName: 'Alice Wilson', customerPhone: '555-0401', email: 'alice@example.com', vehicleMakeModel: 'Tesla Model 3', preferredDate: '2026-02-18', preferredTime: '10:00 AM', duration: 60, driverLicense: 'DL123456', insurance: 'Yes', feedback: 'Great acceleration and handling', status: 'Completed', rating: 5 },
@@ -23,7 +25,7 @@ export default function TestDrive() {
   ])
 
   const [showForm, setShowForm] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TestDriveFormData>({
     customerName: '',
     customerPhone: '',
     email: '',
@@ -32,8 +34,8 @@ export default function TestDrive() {
     preferredTime: '',
     duration: 60,
     driverLicense: '',
-    insurance: 'Yes' as const,
-    status: 'Scheduled' as const,
+    insurance: 'Yes',
+    status: 'Scheduled',
   })
 
   const handleAddDrive = (e: React.FormEvent) => {
@@ -185,7 +187,7 @@ export default function TestDrive() {
                 <label>Has Insurance?</label>
                 <select
                   value={formData.insurance}
-                  onChange={(e) => setFormData({ ...formData, insurance: e.target.value as 'Yes' | 'No' })}
+                  onChange={(e) => setFormData({ ...formData, insurance: e.target.value as TestDriveFormData['insurance'] })}
                 >
                   <option>Yes</option>
                   <option>No</option>

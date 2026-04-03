@@ -15,6 +15,8 @@ interface Vehicle {
   dateAdded: string
 }
 
+type VehicleFormData = Omit<Vehicle, 'id' | 'dateAdded'>
+
 export default function Inventory() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([
     { id: 1, make: 'Tesla', model: 'Model 3', year: 2024, color: 'Pearl White', vin: 'TSL2024001', price: '$52,000', mileage: 15, transmission: 'Automatic', fuelType: 'Electric', status: 'Available', dateAdded: '2026-02-01' },
@@ -25,7 +27,7 @@ export default function Inventory() {
 
   const [showForm, setShowForm] = useState(false)
   const [filter, setFilter] = useState({ status: 'All', fuelType: 'All' })
-  const [formData, setFormData] = useState({ 
+  const [formData, setFormData] = useState<VehicleFormData>({ 
     make: '', 
     model: '', 
     year: 2026, 
@@ -33,9 +35,9 @@ export default function Inventory() {
     vin: '',
     price: '',
     mileage: 0,
-    transmission: 'Automatic' as const,
-    fuelType: 'Gasoline' as const,
-    status: 'Available' as const,
+    transmission: 'Automatic',
+    fuelType: 'Gasoline',
+    status: 'Available',
   })
 
   const handleAddVehicle = (e: React.FormEvent) => {
@@ -179,7 +181,7 @@ export default function Inventory() {
                 <label>Transmission</label>
                 <select 
                   value={formData.transmission}
-                  onChange={(e) => setFormData({ ...formData, transmission: e.target.value as 'Manual' | 'Automatic' })}
+                  onChange={(e) => setFormData({ ...formData, transmission: e.target.value as VehicleFormData['transmission'] })}
                 >
                   <option>Manual</option>
                   <option>Automatic</option>
@@ -201,7 +203,7 @@ export default function Inventory() {
                 <label>Status</label>
                 <select 
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Available' | 'Sold' | 'Reserved' })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as VehicleFormData['status'] })}
                 >
                   <option>Available</option>
                   <option>Reserved</option>

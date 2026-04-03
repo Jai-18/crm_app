@@ -16,6 +16,8 @@ interface Sale {
   salesPerson: string
 }
 
+type SaleFormData = Omit<Sale, 'id' | 'financingAmount' | 'monthlyPayment' | 'saleDate'>
+
 export default function Sales() {
   const [sales, setSales] = useState<Sale[]>([
     { id: 1, customerName: 'John Smith', customerEmail: 'john@example.com', vehicleMakeModel: 'Tesla Model 3', salePrice: '$52,000', downPayment: '$10,000', financingAmount: '$42,000', term: 60, interestRate: 4.5, monthlyPayment: '$769', saleDate: '2026-02-14', status: 'Completed', salesPerson: 'Alex Thompson' },
@@ -24,7 +26,7 @@ export default function Sales() {
   ])
 
   const [showForm, setShowForm] = useState(false)
-  const [formData, setFormData] = useState({ 
+  const [formData, setFormData] = useState<SaleFormData>({ 
     customerName: '', 
     customerEmail: '',
     vehicleMakeModel: '',
@@ -33,7 +35,7 @@ export default function Sales() {
     term: 60,
     interestRate: 4.5,
     salesPerson: '',
-    status: 'Pending' as const,
+    status: 'Pending',
   })
 
   const calculateFinancing = () => {
@@ -185,7 +187,7 @@ export default function Sales() {
                 <label>Status</label>
                 <select 
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Completed' | 'Pending' | 'Negotiating' })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as SaleFormData['status'] })}
                 >
                   <option>Pending</option>
                   <option>Negotiating</option>
